@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bar bacio - Cyberpunk Concept</title>
+    <!-- 80年代風のサイバーパンクなフォント -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --bg-color: #050505;
+            --card-bg: rgba(20, 20, 20, 0.8);
+            --text-color: #e0e0e0;
+            --glitch-speed: 500ms;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- CRTモニター風の走査線エフェクト --- */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* --- ハンバーガーメニュー --- */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 5px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .menu-btn span {
+            width: 100%;
+            height: 2px;
+            background-color: var(--neon-cyan);
+            transition: 0.3s;
+        }
+
+        .menu-btn.open span:nth-child(1) { transform: translateY(11px) rotate(45deg); }
+        .menu-btn.open span:nth-child(2) { opacity: 0; }
+        .menu-btn.open span:nth-child(3) { transform: translateY(-11px) rotate(-45deg); }
+
+        /* --- ナビゲーションオーバーレイ --- */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 5, 0.95);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: 0.5s ease;
+        }
+
+        .nav-overlay.active {
+            right: 0;
+        }
+
+        .nav-overlay ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .nav-overlay ul li {
+            margin: 20px 0;
+        }
+
+        .nav-overlay ul li a {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .nav-overlay ul li a:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        /* --- セクション共通設定 --- */
+        section {
+            min-height: 100vh;
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 0, 255, 0.1);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        /* --- TOP セクション --- */
+        #top {
+            background: radial-gradient(circle at center, #1a001a 0%, #050505 100%);
+        }
+
+        .glitch {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0.05em 0 0 rgba(255,0,255,0.75), -0.025em -0.05em 0 rgba(0,255,255,0.75), 0.025em 0.05em 0 rgba(0,255,0,0.75);
+            animation: glitch var(--glitch-speed) infinite;
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--neon-pink);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--neon-cyan);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 3s infinite linear alternate-reverse;
+        }
+
+        .sector-tag {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--neon-cyan);
+            letter-spacing: 0.3em;
+            margin-top: 10px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* --- About Us --- */
+        .about-content {
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .about-item {
+            margin-bottom: 60px;
+        }
+
+        /* 横並び用のスタイル */
+        .about-item-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: flex-end; /* 右寄せ */
+        }
+
+        .about-text-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--neon-cyan);
+        }
+
+        /* 画像スタイル */
+        .cyber-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+            display: block;
+            margin: 15px 0; /* マージンあり（デフォルト） */
+        }
+
+        .image-placeholder {
+            display: none;
+            width: 200px;
+            height: 150px;
+            background: #111;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-size: 0.8rem;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .mama-section {
+            margin-top: 80px;
+            text-align: left; /* 左寄せ */
+        }
+
+        /* ママのコンテナと吹き出し */
+        .mama-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .speech-bubble {
+            position: relative;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 15px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            max-width: 250px;
+            box-shadow: 0 0 10px var(--neon-pink);
+            border-radius: 8px;
+            margin-top: 140px; /* 3cmほど下げる調整 (30px -> 140px) */
+            text-shadow: none;
+            line-height: 1.5;
+        }
+
+        /* 吹き出しの矢印（左向き） */
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 12px solid var(--neon-pink);
+        }
+
+        .arrows {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--neon-pink);
+            line-height: 1.8;
+            margin: 20px 0;
+            animation: drip 2s infinite;
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        @keyframes drip {
+            0%, 100% { opacity: 1; transform: translateY(0); }
+            50% { opacity: 0.5; transform: translateY(5px); }
+        }
+
+        .mama-reveal {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem; /* 1.6rem -> 1rem */
+            color: var(--neon-pink);
+            margin-bottom: 5px; 
+            background: rgba(255, 0, 255, 0.1);
+            padding: 5px 10px; /* 10px -> 5px 10px */
+            border: 1px dashed var(--neon-pink);
+            display: inline-block;
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        /* --- Pricing --- */
+        .price-list {
+            font-family: 'Share Tech Mono', monospace;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed var(--neon-cyan);
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+
+        .price-item:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        /* --- LINE/INSTAGRAM ボタン --- */
+        .cyber-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            color: var(--neon-pink);
+            text-decoration: none;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            border: 1px solid var(--neon-pink);
+            transition: 0.2s;
+            background: rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+            text-transform: uppercase;
+        }
+
+        .cyber-btn:hover {
+            background: var(--neon-pink);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+        
+        .warning-text {
+            display: block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: #ff3333;
+            margin-top: 10px;
+            text-align: center;
+            opacity: 0;
+            animation: blink 2s infinite;
+        }
+
+        /* --- アニメーション --- */
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 rgba(255,0,255,0.75), -0.05em -0.025em 0 rgba(0,255,255,0.75); }
+            50% { text-shadow: 0.025em 0.05em 0 rgba(255,0,255,0.75), 0.05em 0 0 rgba(0,255,255,0.75); }
+            100% { text-shadow: -0.025em 0 0 rgba(255,0,255,0.75), -0.025em -0.05em 0 rgba(0,255,0,0.75); }
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        @keyframes glitch-anim { 0% { clip: rect(10px, 9999px, 86px, 0); } 100% { clip: rect(53px, 9999px, 66px, 0); } }
+        @keyframes glitch-anim2 { 0% { clip: rect(29px, 9999px, 83px, 0); } 100% { clip: rect(88px, 9999px, 44px, 0); } }
+
+        @media (max-width: 600px) {
+            .glitch { font-size: 2.5rem; }
+            .section-title { font-size: 1.8rem; }
+            .about-item-row { flex-direction: column; align-items: flex-end; }
+            
+            /* ママセクションのスマホ対応 */
+            .mama-container { flex-direction: column; }
+            .speech-bubble {
+                margin-top: 15px;
+                margin-left: 0;
+                max-width: 100%;
+            }
+            .speech-bubble::before {
+                left: 20px;
+                top: -12px;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 12px solid var(--neon-pink);
+                border-top: none;
+                border-right-width: 10px; /* リセット */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ハンバーガーメニューボタン -->
+    <div class="menu-btn" id="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- メニューオーバーレイ -->
+    <nav class="nav-overlay" id="nav-overlay">
+        <ul>
+            <li><a href="#top" onclick="closeMenu()">TOP</a></li>
+            <li><a href="#about" onclick="closeMenu()">ABOUT US</a></li>
+            <li><a href="#pricing" onclick="closeMenu()">PRICING</a></li>
+            <li><a href="#access" onclick="closeMenu()">ACCESS</a></li>
+            <li><a href="#contact" onclick="closeMenu()">CONTACT</a></li>
+            <li><a href="#link" onclick="closeMenu()">LINK</a></li>
+        </ul>
+    </nav>
+
+    <!-- 1. TOP -->
+    <section id="top">
+        <h1 class="glitch" data-text="bar bacio">bar bacio</h1>
+        <div class="sector-tag">LOCATION : EBICHIKA</div>
+    </section>
+
+    <!-- 3. ABOUT US -->
+    <section id="about">
+        <h2 class="section-title">ABOUT US / 密談</h2>
+        <div class="about-content">
+            <!-- 復活させたテキスト -->
+            <p style="margin-bottom: 50px; line-height: 2;">
+                エビチカの深層に位置する、身元不明者たちの安息地。<br>
+                1980年代の幻影を最新のノイズで上書きしたような空間で、静かな「取引」と「休息」を提供します。
+            </p>
+
+            <!-- 店内の紹介 -->
+            <div class="about-item">
+                <div class="about-item-row">
+                    <p class="about-text-header" style="margin-bottom: 0; min-width: fit-content;">店内は→→→</p>
+                    <div>
+                        <!-- margin-bottom:0 に設定 -->
+                        <img src="image/tennai.jpg" alt="[店内]" class="cyber-image" style="width: 200px; margin-bottom: 0;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder">
+                            [IMAGE ERROR: tennai.jpg]
+                        </div>
+                    </div>
+                </div>
+                <!-- 画像にピタッとくっつけるため margin-top: -5px, font-size調整 -->
+                <p style="text-align: right; letter-spacing: 5px; margin-top: -5px; font-size: 0.8rem; color: var(--neon-cyan);">一体感のある狭さ</p>
+            </div>
+
+            <!-- ママの紹介 -->
+            <div class="mama-section">
+                <p class="about-text-header" style="color: var(--neon-pink);">ママは</p>
+                <div class="arrows">
+                    ↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>
+                    ↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓
+                </div>
+                <div class="mama-reveal">
+                    見世物小屋の一員です
+                </div>
+                
+                <div class="mama-container">
+                    <div>
+                        <img src="image/mama.jpg" alt="[ママ]" class="cyber-image" style="border-color: var(--neon-pink); max-width: 300px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="image-placeholder" style="max-width: 300px; border-color: var(--neon-pink); color: var(--neon-pink);">
+                            [IMAGE ERROR: mama.jpg]
+                        </div>
+                    </div>
+                    <!-- 吹き出し -->
+                    <div class="speech-bubble">
+                        ウチは一見さんお断りだけど、ホームページ見たって言うなら入れてあげなくもないわ
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. PRICING -->
+    <section id="pricing">
+        <h2 class="section-title">PRICING / 闇市価格</h2>
+        <div class="price-list">
+            <div class="price-item"><span>MENS CHARGE</span><span>¥3,000</span></div>
+            <div class="price-item"><span>LADIES CHARGE</span><span>¥2,000</span></div>
+            <div class="price-item"><span>1 DRINK</span><span>¥1,000~</span></div>
+            <div class="price-item"><span>BOTTLE</span><span>¥4,000~</span></div>
+        </div>
+    </section>
+
+    <!-- 5. ACCESS -->
+    <section id="access">
+        <h2 class="section-title">ACCESS / 潜伏場所</h2>
+        <div class="content-box" style="text-align: center;">
+            <p>東京都渋谷区恵比寿南2丁目3−3ピーコック地下</p>
+            
+            <!-- 営業時間追加 -->
+            <div style="margin: 30px 0; border-top: 1px dashed var(--neon-cyan); border-bottom: 1px dashed var(--neon-cyan); padding: 20px 0;">
+                <p style="color: var(--neon-pink); font-family: 'Orbitron'; font-weight: bold; margin-bottom: 5px;">OPERATION TIME / 稼働時間</p>
+                <p style="font-family: 'Share Tech Mono'; font-size: 1.5rem; letter-spacing: 2px;">22:00 - UNTIL_DAWN</p>
+                <p style="font-size: 0.8rem; color: var(--neon-cyan); margin-top: 5px;">DAY OFF : IRREGULAR (不定休)</p>
+            </div>
+
+            <div style="margin-top: 20px; width: 100%; height: 200px; background: #111; border: 1px solid var(--neon-cyan); display: flex; align-items: center; justify-content: center; color: var(--neon-cyan);">
+                [MAP DATA ENCRYPTED]
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. CONTACT -->
+    <section id="contact">
+        <h2 class="section-title">CONTACT / 直接交渉</h2>
+        <div style="text-align: center;">
+            <p style="margin-bottom: 30px;">インスタのDMでお願いします。</p>
+            <a href="https://ig.me/m/bacio.6969" target="_blank" class="cyber-btn">CONNECT [INSTAGRAM DM]</a>
+            <p style="font-family: 'Share Tech Mono'; font-size: 0.7rem; color: #ff3333; margin-top: 15px;">⚠ DIRECT LINE IS UNSECURED</p>
+        </div>
+    </section>
+
+    <!-- 7. LINK -->
+    <section id="link">
+        <h2 class="section-title">LINK / 外部接続</h2>
+        <div class="content-box" style="width: 300px;">
+            <ul style="list-style: none; font-family: 'Share Tech Mono';">
+                <li style="margin-bottom: 10px;"><a href="#" style="color: var(--neon-cyan); text-decoration: none;">> INSTAGRAM_FEED</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: var(--neon-cyan); text-decoration: none;">> TWITTER_X_ERROR</a></li>
+                <li><a href="#" style="color: var(--neon-cyan); text-decoration: none;">> DEEP_WEB_FORUM</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const navOverlay = document.getElementById('nav-overlay');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('open');
+            navOverlay.classList.toggle('active');
+        });
+
+        function closeMenu() {
+            menuBtn.classList.remove('open');
+            navOverlay.classList.remove('active');
+        }
+    </script>
+</body>
+</html>

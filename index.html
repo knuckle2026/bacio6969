@@ -1,4 +1,4 @@
-<!-- bacio site version 1.0.2 -->
+<!-- bacio site version 1.0.3 -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -320,6 +320,17 @@
             margin-bottom: 10px;
         }
 
+        .price-category {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--neon-cyan);
+            border-bottom: 1px solid var(--neon-cyan);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            display: inline-block;
+            text-shadow: 0 0 5px var(--neon-cyan);
+        }
+
         .price-item:hover {
             color: var(--neon-pink);
             text-shadow: 0 0 5px var(--neon-pink);
@@ -451,7 +462,6 @@
             <div class="mama-section">
                 <p class="about-text-header" style="color: var(--neon-pink);">ママは</p>
                 <div class="arrows">
-                    ↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>
                     ↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓<br>↓
                 </div>
                 <div class="mama-reveal">
@@ -478,10 +488,31 @@
     <section id="pricing">
         <h2 class="section-title">PRICING / 闇市価格</h2>
         <div class="price-list">
-            <div class="price-item"><span>MENS CHARGE</span><span>¥3,000</span></div>
-            <div class="price-item"><span>LADIES CHARGE</span><span>¥2,000</span></div>
-            <div class="price-item"><span>1 DRINK</span><span>¥1,000~</span></div>
-            <div class="price-item"><span>BOTTLE</span><span>¥4,000~</span></div>
+            
+            <!-- BOTTLE -->
+            <div class="price-category">BOTTLE</div>
+            <div class="price-item"><span>鏡月プレミアム</span><span>¥5,000</span></div>
+            <div class="price-item"><span>吉四六</span><span>¥6,500</span></div>
+            <div class="price-item"><span>芋（時期により仕入れ変更）</span><span>¥5,500</span></div>
+
+            <!-- WHISKY -->
+            <div class="price-category">WHISKY BOTTLE</div>
+            <div class="price-item"><span>山崎</span><span>¥24,000</span></div>
+            <div class="price-item"><span>白州</span><span>¥24,000</span></div>
+            <div class="price-item"><span>知多</span><span>¥22,000</span></div>
+
+            <!-- SYSTEM -->
+            <div class="price-category">SYSTEM</div>
+            <div class="price-item" style="border: none; color: var(--neon-pink);">
+                <span>セット代（割りものフリー）</span><span>¥3,500</span>
+            </div>
+
+            <!-- SHOT -->
+            <div class="price-category">SHOT SYSTEM</div>
+            <div class="price-item"><span>席チャージ</span><span>¥1,300</span></div>
+            <div class="price-item"><span>1杯</span><span>¥800~</span></div>
+
+            <p style="margin-top: 40px; text-align: right; font-family: 'Orbitron'; letter-spacing: 2px; color: var(--text-color); font-size: 0.8rem;">ALL + TAX</p>
         </div>
     </section>
 

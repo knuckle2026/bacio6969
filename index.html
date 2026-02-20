@@ -1,4 +1,4 @@
-<!-- bacio site version 1.0.7 -->
+<!-- bacio site version 1.0.8 -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -565,13 +565,6 @@
         </div>
     </section>
 
-    <!-- フッター（アクセスカウンター） -->
-    <footer style="text-align: center; padding: 40px 20px; border-top: 1px dashed rgba(0, 255, 255, 0.3); margin-top: 20px; font-family: 'Share Tech Mono', monospace; color: var(--neon-cyan);">
-        <div style="font-size: 0.9rem; margin-bottom: 10px;">> TOTAL_ACCESS</div>
-        <div id="access-count" style="font-size: 2.5rem; color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink); letter-spacing: 5px;">[ ------ ]</div>
-        <p style="font-size: 0.7rem; color: #666; margin-top: 20px;">© bar bacio69. All rights reserved.</p>
-    </footer>
-
     <script>
         const menuBtn = document.getElementById('menu-btn');
         const navOverlay = document.getElementById('nav-overlay');
@@ -584,55 +577,6 @@
         function closeMenu() {
             menuBtn.classList.remove('open');
             navOverlay.classList.remove('active');
-        }
-    </script>
-
-    <!-- Firebase アクセスカウンター用スクリプト -->
-    <script type="module">
-        // FirebaseのSDKをインポート（Firestoreを使用）
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-        // ▼▼▼ Firebaseの画面でコピーした「firebaseConfig」をこの下に上書きして貼り付けます ▼▼▼
-        const firebaseConfig = {
-            // 例: 
-            // apiKey: "AIzaSyBxxxxxxx...",
-            // authDomain: "bar-bacio-xxxx.firebaseapp.com",
-            // projectId: "bar-bacio-xxxx",
-            // storageBucket: "bar-bacio-xxxx.appspot.com",
-            // messagingSenderId: "1234567890",
-            // appId: "1:1234567890:web:abcdefg..."
-        };
-        // ▲▲▲ ここまで ▲▲▲
-
-        // 設定が入力されている場合のみ動かす
-        if (Object.keys(firebaseConfig).length > 0) {
-            try {
-                // Firebaseを初期化
-                const app = initializeApp(firebaseConfig);
-                const db = getFirestore(app);
-
-                // Firestoreから「siteInfo」という場所の「accessCounter」データにアクセス
-                const counterRef = doc(db, "siteInfo", "accessCounter");
-
-                // アクセス数を取得して +1 する処理
-                const docSnap = await getDoc(counterRef);
-                const countElement = document.getElementById('access-count');
-
-                if (docSnap.exists()) {
-                    // データがある場合は +1 して画面に表示（6桁のゼロ埋め）
-                    let currentCount = docSnap.data().count;
-                    await updateDoc(counterRef, { count: increment(1) });
-                    countElement.innerText = '[' + String(currentCount + 1).padStart(6, '0') + ']';
-                } else {
-                    // まだデータがない（最初の1人目）場合
-                    await setDoc(counterRef, { count: 1 });
-                    countElement.innerText = '[000001]';
-                }
-            } catch (error) {
-                console.error("Counter Error:", error);
-                document.getElementById('access-count').innerText = '[ ERROR ]';
-            }
         }
     </script>
 </body>
